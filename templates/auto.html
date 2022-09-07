@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<head>
+    <title>Garden watering system</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- FLASH Messages-->
+    <!--{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}-->
+</head>
+
+<body>
+   <h1>Automatic mode</h1>
+   {% for valve in valves %}
+    <h3>{{ valve.name }}</h3>
+    {% if valve.job == 'running' %}
+    <p><b>is scheduled to open at {{ valve.sched_time }} for {{ valve.duration }} minutes.</b></p>
+    {% elif valve.job == 'paused' %}
+    <p><b>Automatic watering is paused.</b></p>
+    {% endif %}
+       <div>
+       <form action="/setJob/{{valves.index(valve)+1}}" method="GET">
+            <p>Run at <input type="time" name="scheduled_time" required> for <!--value="{{ valve.sched_time }}"-->
+            <input type="number" name="duration" style="width: 4em" required> minutes<br>
+            every <input type="number" name="period" style="width: 3em" value="1"> (number) of days.<br>
+            <!--<input type="radio" id="every" name="freq">
+            <label for="every">every day </label>
+            <input type="radio" id="2nd" name="freq">
+            <label for="2nd">every 2nd day </label>
+            <input type="radio" id="once" name="freq">
+            <label for="once">only once</label><br/>-->
+            
+            <input type="checkbox" id="rain" name="NotIfRained" disabled>
+            <label for="rain">Do not water if it has rained in past 12h</label></p>
+            
+            <input type="submit" onclick="{{ valve.name }} has been scheduled!')" name="{{ valve.name }}">
+            {% if valve.job == 'running'%}
+            <button onclick="window.location.href='/pauseJob/{{valves.index(valve)+1}}';">Pause</button>
+            {% elif valve.job == 'paused' %}  
+            <button onclick="window.location.href='/resumeJob/{{valves.index(valve)+1}}';">Resume</button>
+            {% endif %}
+        </form>
+        </div>   
+    <hr>
+   {% endfor %}
+   
+    <div class="col-md-2">
+    <a href="/main/" role="button">Manual mode</a><br> <!--class="btn btn-block btn-lg btn-primary"-->
+    <a href="/sensors/" role="button">Sensor data</a>
+    </div>
+</body>
+</html>

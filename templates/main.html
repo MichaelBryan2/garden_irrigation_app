@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<head>
+    <title>Garden watering system</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Michael Bryan">
+    <meta http-equiv="refresh" content="16">
+<script>
+</script>
+</head>
+<body>
+   <h1>Manual mode</h1>
+   {% for valve in valves %}
+   <h3>{{ valve.name }} is now <strong>{{ valve.state }}</strong>.</h3>
+   {% if (valve.state == 'closed') or (valve.state == 'closing') %}
+      <div class="row"><div class="col-md-2">
+      <a href="/{{valves.index(valve)+1}}/on" role="button">Turn on</a></div></div>
+    
+   {% elif (valve.state == 'open') or (valve.state == 'opening') %}
+      <div class="row"><div class="col-md-2">
+      <a href="/{{valves.index(valve)+1}}/off" role="button">Turn off</a></div></div>
+   {% endif %}
+   {% endfor %}
+    <hr>
+    {% if AutoMode %}
+    <strong>Automatic mode is still active.</strong>
+    <a href="/pauseSched/" role="button">Press to turn it off.</a>
+    <hr>
+    {% endif %}
+    <div class="col-md-2">
+    <a href="/auto/" class="btn btn-block btn-lg btn-primary" role="button">Automatic mode</a><br>
+    <a href="/sensors/" role="button">Sensor data</a>
+    </div>
+</body>
+</html>
